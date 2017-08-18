@@ -27,7 +27,9 @@ public class MvcBoardDAO {
 	public void increment(SqlSession mapper, int idx) {
 		mapper.update("increment", idx);
 	}
-	
+
+//	MvcBoardService 클래스에서 매퍼와 화면에 출력할 글번호를 넘겨받고 글번호에 해당되는 글 한건을 얻어오는
+//	select SQL 명령을 실행하는 메소드
 	public MvcBoardVO selectByIdx(SqlSession mapper, int idx) {
 		return (MvcBoardVO) mapper.selectOne("selectByIdx", idx);
 	}
