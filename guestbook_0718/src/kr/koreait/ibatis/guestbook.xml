@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DOCTYPE이 sqlMap은 처리할 SQL 명령을 기억하는 xml 파일이다. -->
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="guestbook">
+	<!-- id : SQL 명령을 식별한다. -->
+	<!-- parameterClass : SQL 명령으로 전달되는 데이터의 타입을 적는다. -->
+	<!-- resultClass : SQL 명령문에의해 출력되는 데이터의 타입을 적는다. -->
+
+	<!-- 입력받은 글을 테이블에 저장한다. -->
+	<insert id="insert" parameterClass="kr.koreait.VO.GuestbookVO">
+		<!-- guestbook_idx_seq.nextval : 시퀀스 값을 1 증가 시킨다. -->
+		<!-- guestbook_idx_seq.currval : 현재 시퀀스 값을 의미한다. -->
+		insert into guestbook (idx, name, password, content, ip) 
+		values (guestbook_idx_seq.nextval, #name#, #password#, #content#, #ip#)
+	</insert>
+	
+	<!-- 테이블에 저장된 전체 글의 개수를 얻어온다. -->
+	<select id="selectCount" resultClass="int">
+		select count(*) from guestbook
+	</select>
+	
+	<!-- 테이블에 저장된 전체 글 중에서 검색어(내용)를 포함하는 글의 개수를 얻어온다. -->
+	<select id="selectCountItem" parameterClass="String" resultClass="int">
+		select count(*) from guestbook where content like '%'||#item#||'%'
+	</select>
+	
+	<!-- 테이블에 저장된 전체 글 중에서 검색어(이름)를 포함하는 글의 개수를 얻어온다. -->
+	<select id="selectCountName" parameterClass="String" resultClass="int">
+		select count(*) from guestbook where name like '%'||#item#||'%'
+	</select>
+	
+	<!-- 테이블에 저장된 전체 글 중에서 검색어(이름+내용)를 포함하는 글의 개수를 얻어온다. -->
+	<select id="selectCountNameContent" parameterClass="String" resultClass="int">
+		select count(*) from guestbook where name like '%'||#item#||'%' or content like '%'||#item#||'%'
+	</select>
+	
+	<!-- 테이블에 저장된 전체 글 중에서 검색어를 포함하는 글의 개수를 얻어온다. -->
+	<select id="selectCountMulti" parameterClass="java.util.HashMap" resultClass="int">
+		<!-- 	
+		<isEqual property="category" compareValue="내용">
+			select count(*) from guestbook where content like '%'||#item#||'%'
+		</isEqual>
+		<isEqual property="category" compareValue="이름">
+			select count(*) from guestbook where name like '%'||#item#||'%'
+		</isEqual>
+		<isEqual property="category" compareValue="이름+내용">
+			select count(*) from guestbook where name like '%'||#item#||'%' or content like '%'||#item#||'%'
+		</isEqual>
+		-->
+		select count(*) from guestbook where 
+		<isEqual property="category" compareValue="내용">
+			content like '%'||#item#||'%'
+		</isEqual>
+		<isEqual property="category" compareValue="이름">
+			name like '%'||#item#||'%'
+		</isEqual>
+		<isEqual property="category" compareValue="이름+내용">
+			name like '%'||#item#||'%' or content like '%'||#item#||'%'
+		</isEqual>
+ 	</select>
+	
+	<!-- 테이블에 저장된 글 중에서 한 페이지 분량의 글을 얻어온다. -->
+	<select id="selectList" parameterClass="java.util.HashMap" resultClass="kr.koreait.VO.GuestbookVO">
+		<!-- <![CDATA[ 부터 ]]> 사이에 입력하는 내용은 무조건 문자열로 취급된다. -->
+		<![CDATA[
+		select * from (
+			select rownum rnum, T.* from (
+				select * from guestbook order by idx desc
+			) T where rownum <= #endNo#
+		) where rnum >= #startNo#
+		]]>
+	</select>
+	
+	<!-- 테이블에 저장된 글 중에서 검색어(내용)를 포함하는 한 페이지 분량의 글을 얻어온다. -->
+	<select id="selectListItem" parameterClass="kr.koreait.VO.Param" resultClass="kr.koreait.VO.GuestbookVO">
+		<![CDATA[
+		select * from (
+			select rownum rnum, T.* from (
+				select * from guestbook where content like '%'||#item#||'%' order by idx desc
+			) T where rownum <= #endNo#
+		) where rnum >= #startNo#
+		]]>
+	</select>
+	
+	<!-- 테이블에 저장된 글 중에서 검색어(이름)를 포함하는 한 페이지 분량의 글을 얻어온다. -->
+	<select id="selectListName" parameterClass="kr.koreait.VO.Param" resultClass="kr.koreait.VO.GuestbookVO">
+		<![CDATA[
+		select * from (
+			select rownum rnum, T.* from (
+				select * from guestbook where name like '%'||#item#||'%' order by idx desc
+			) T where rownum <= #endNo#
+		) where rnum >= #startNo#
+		]]>
+	</select>
+	
+	<!-- 테이블에 저장된 글 중에서 검색어(이름)를 포함하는 한 페이지 분량의 글을 얻어온다. -->
+	<select id="selectListNameContent" parameterClass="kr.koreait.VO.Param" 
+																	resultClass="kr.koreait.VO.GuestbookVO">
+		<![CDATA[
+		select * from (
+			select rownum rnum, T.* from (
+				select * from guestbook where name like '%'||#item#||'%' or content like '%'||#item#||'%' 
+						order by idx desc
+			) T where rownum <= #endNo#
+		) where rnum >= #startNo#
+		]]>
+	</select>
+	
+	<!-- 테이블에 저장된 글 중에서 검색어를 포함하는 한 페이지 분량의 글을 얻어온다. -->
+	<select id="selectListMulti" parameterClass="kr.koreait.VO.Param" 
+																	resultClass="kr.koreait.VO.GuestbookVO">
+		select * from (
+			select rownum rnum, T.* from (
+				select * from guestbook where 
+				
+					<isEqual property="category" compareValue="내용">
+						content like '%'||#item#||'%'
+					</isEqual>
+					<isEqual property="category" compareValue="이름">
+						name like '%'||#item#||'%'
+					</isEqual>
+					<isEqual property="category" compareValue="이름+내용">
+						name like '%'||#item#||'%' or content like '%'||#item#||'%'
+					</isEqual>
+									
+				order by idx desc
+		<![CDATA[
+			) T where rownum <= #endNo#
+		) where rnum >= #startNo#
+		]]>
+	</select>
+
+	<!-- 테이블에 저장된 글 한 건을 얻어온다. -->
+	<select id="selectByIdx" parameterClass="int" resultClass="kr.koreait.VO.GuestbookVO">
+		select * from guestbook where idx = #idx#
+	</select>
+
+	<!-- 테이블에 저장된 글 한 건을 삭제한다. -->
+	<delete id="delete" parameterClass="int">
+		delete from guestbook where idx = #idx#
+	</delete>
+
+	<!-- 테이블에 저장된 글 한 건을 수정한다. -->
+	<update id="update" parameterClass="kr.koreait.VO.GuestbookVO">
+		update guestbook set name = #name#, content = #content# where idx = #idx#
+	</update>
+	
+</sqlMap>
+
+
+
+
+
+
+
