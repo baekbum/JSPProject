@@ -33,6 +33,20 @@ public class MvcBoardDAO {
 	public MvcBoardVO selectByIdx(SqlSession mapper, int idx) {
 		return (MvcBoardVO) mapper.selectOne("selectByIdx", idx);
 	}
-//	
+
+//	MvcBoardService 클래스에서 매퍼와 수정할 내용이 저장된 객체를 넘겨받고 글을 수정하는 update SQL 명령을
+//	실행하는 메소드
+	public void update(SqlSession mapper, MvcBoardVO vo) {
+		mapper.update("update", vo);
+	}
+	
+//	MvcBoardService 클래스에서 매퍼와 삭제할 글 번호를 넘겨받고 글을 삭제하는 update SQL 명령을 실행하는 메소드
+	public void delete(SqlSession mapper, int idx) {
+		mapper.delete("delete", idx);
+	}
+	
+	public void reply(SqlSession mapper, MvcBoardVO vo) {
+		mapper.insert("reply", vo);
+	}
 	
 }

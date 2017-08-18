@@ -19,25 +19,35 @@
 		<td width="140" align="center">작성일</td>
 		<td width="80" align="center">조회수</td>
 	</tr>
-	<c:forEach var="vo" items="${list.list }">
-	<tr>
-		<td>${vo.idx }</td>
-		<td>
-			<c:set var="name" value="${fn:replace(vo.name, '<', '&lt;')}"/>
-			<c:set var="name" value="${fn:replace(name, '>', '&gt;')}"/>
-			${name }
-		</td>
-		<td>
-			<c:set var="subject" value="${fn:replace(vo.subject, '<', '&lt;')}"/>
-			<c:set var="subject" value="${fn:replace(subject, '>', '&gt;')}"/>
-			<a href="increment.nhn?idx=${vo.idx}">${subject }</a>
-		</td>
-		<td>
-			<fmt:formatDate value="${vo.writedate }" pattern="yyyy.MM.dd(E)"/>
-		</td>
-		<td>${vo.hit }</td>		
-	</tr>
-	</c:forEach>
+	<c:if test="${list.list.size() != 0 }">
+		<c:forEach var="vo" items="${list.list }">
+		<tr>
+			<td>${vo.idx }</td>
+			<td>
+				<c:set var="name" value="${fn:replace(vo.name, '<', '&lt;')}"/>
+				<c:set var="name" value="${fn:replace(name, '>', '&gt;')}"/>
+				${name }
+			</td>
+			<td>
+				<c:set var="subject" value="${fn:replace(vo.subject, '<', '&lt;')}"/>
+				<c:set var="subject" value="${fn:replace(subject, '>', '&gt;')}"/>
+				<a href="increment.nhn?idx=${vo.idx}">${subject }</a>
+			</td>
+			<td>
+				<fmt:formatDate value="${vo.writedate }" pattern="yyyy.MM.dd(E)"/>
+			</td>
+			<td>${vo.hit }</td>		
+		</tr>
+		</c:forEach>
+	</c:if>
+	
+	<c:if test="${list.list.size() == 0 }">
+		<tr>
+			<td colspan="5" align="center">
+			게시글이 없습니다.
+			</td>
+		</tr>			
+	</c:if>
 	
 	<tr>
 		<td colspan="5" align="right">

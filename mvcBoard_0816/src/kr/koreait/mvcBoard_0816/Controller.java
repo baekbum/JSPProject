@@ -58,7 +58,26 @@ public class Controller extends HttpServlet {
 			case "/view.nhn" :
 				service.selectByIdx(request, response);
 				viewPage = "/WEB-INF/view.jsp";
+				request.setAttribute("rn", "\r\n");
 				break;
+			case "/update.nhn" :
+				service.update(request, response);
+				viewPage = "list.nhn";
+				break;
+			case "/delete.nhn" :
+				service.delete(request, response);
+				viewPage = "list.nhn";
+				break;
+			case "/reply.nhn" :
+//				답글을 입력하는 페이지에 메인 글을 출력하기 위해 메인글을 얻어서 답글을 입력하는 페이지로 간다.
+				service.selectByIdx(request, response);
+				request.setAttribute("rn", "\r\n");
+				viewPage = "/WEB-INF/reply.jsp";
+				break;
+			case "/replyOK.nhn" :
+				service.reply(request, response);
+				viewPage = "list.nhn";
+				break;				
 		}
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);

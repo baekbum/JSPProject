@@ -25,7 +25,7 @@
 		<td colspan="2" align="center">
 			<input type="submit" value="저장하기"/>
 			<input type="reset" value="다시쓰기"/>
-			<input type="button" value="목록보기"/>
+			<input type="button" value="목록보기" onclick="location.href='list.nhn'"/>
 		</td>		
 	</tr>	
 </table>

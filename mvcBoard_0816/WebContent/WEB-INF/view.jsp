@@ -10,6 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+<form action="update.nhn" method="post">
 <table width="600" align="center" border="1">
 	<tr><th colspan="4">게시글 보기</th></tr>
 	<tr>
@@ -19,7 +20,10 @@
 		<td width="70">조회수</td>
 	</tr>
 	<tr>
-		<td>${vo.idx}</td>
+		<td>
+			${vo.idx}
+			<input type="hidden" name="idx" value="${vo.idx }">
+		</td>
 		<td>
 			<c:set var="name" value="${fn:replace(vo.name, '<', '&lt;')}"/>
 			<c:set var="name" value="${fn:replace(name, '>', '&gt;')}"/>
@@ -33,30 +37,38 @@
 	<tr>
 		<td>제목</td>
 		<td colspan="3">
+			<%-- 
 			<c:set var="subject" value="${fn:replace(vo.subject, '<', '&lt;')}"/>
 			<c:set var="subject" value="${fn:replace(subject, '>', '&gt;')}"/>
-			${subject}
+			${subject} 
+			--%>
+			<input type="text" name="subject" value="${vo.subject }"/>
 		</td>
 	</tr>
 	<tr>
 		<td>내용</td>
 		<td colspan="3">
+			<%-- 
 			<c:set var="content" value="${fn:replace(vo.content, '<', '&lt;')}"/>
 			<c:set var="content" value="${fn:replace(content, '>', '&gt;')}"/>
 			<c:set var="content" value="${fn:replace(content, rn, '<br/>')}"/>
-			${content}
+			${content} 
+			--%>
+			<textarea rows="10" cols="60" name="content">${vo.content}</textarea>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="4" align="center">
-			<input type="button" value="수정하기" 
-				onclick="location.href=''"/>
+			<input type="submit" value="수정하기" />
 			<input type="button" value="삭제하기" 
-				onclick="location.href=''"/>
+				onclick="location.href='delete.nhn?idx=${vo.idx}'"/>
+			<input type="button" value="답변하기" 
+				onclick="location.href='reply.nhn?idx=${vo.idx}'"/>
 			<input type="button" value="목록보기" 
 				onclick="location.href='list.nhn'"/>
 		</td>
 	</tr>
 </table>
+</form>
 </body>
 </html>
