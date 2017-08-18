@@ -125,8 +125,7 @@
 		</td>
 	</tr>
 	</c:forEach>
-	</c:if>
-	
+	</c:if>	
 </table>
 </form>
 </body>
