@@ -33,5 +33,6 @@ public class MvcBoardDAO {
 	public MvcBoardVO selectByIdx(SqlSession mapper, int idx) {
 		return (MvcBoardVO) mapper.selectOne("selectByIdx", idx);
 	}
+//	
 	
 }
