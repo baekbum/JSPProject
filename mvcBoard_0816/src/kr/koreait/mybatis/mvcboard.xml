@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.koreait.VO.MvcBoardVO">
+	
+	<!-- 메인글을 저장한다 -->
+	<insert id="insert" parameterType="kr.koreait.VO.MvcBoardVO">
+		insert into mvcboard(idx, name, subject, content, ref, lev, seq) 
+		values(mvcboard_idx_seq.nextval, #{name}, #{subject}, #{content}, mvcboard_idx_seq.currval, 0, 0) 
+	</insert>
+	
+	<!-- 글 목록 전체를 얻어온다 -->
+	<select id="select" resultType="kr.koreait.VO.MvcBoardVO">
+		select * from mvcboard order by ref desc, seq asc
+	</select>
+	
+	<select id="selectByIdx" parameterType="int" resultType="kr.koreait.VO.MvcBoardVO">
+		select * from mvcboard where idx = #{idx}
+	</select>	
+	<!-- 조회수를 증가 시킨다 -->
+	<update id="increment" parameterType="int">
+		update mvcboard set hit = hit + 1 where idx = #{idx}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
