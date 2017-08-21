@@ -1,6 +1,7 @@
 package kr.koreait.DAO;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -44,9 +45,16 @@ public class MvcBoardDAO {
 	public void delete(SqlSession mapper, int idx) {
 		mapper.delete("delete", idx);
 	}
-	
+
+//	MvcBoardService 클래스에서 매퍼와 저장할 답글 vo를 넘겨받고 답글을 저장하는 insert SQL 명령을 실행하는 메소드	
 	public void reply(SqlSession mapper, MvcBoardVO vo) {
 		mapper.insert("reply", vo);
+	}
+
+//	MvcBoardService 클래스에서 매퍼와 ref, seq가 저장된 Hash<String, Integer> 객체를 넘겨받고 글을 seq을 1증가
+//	시키는 update SQL 명령을 실행하는 메소드
+	public void replyArange(SqlSession mapper, HashMap<String, Integer> hmap) {
+		mapper.update("replyArange", hmap);
 	}
 	
 }

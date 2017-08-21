@@ -8,9 +8,10 @@
 		values(mvcboard_idx_seq.nextval, #{name}, #{subject}, #{content}, mvcboard_idx_seq.currval, 0, 0) 
 	</insert>
 	
+	<!-- 답글을 저장한다 -->
 	<insert id="reply" parameterType="kr.koreait.VO.MvcBoardVO">
 		insert into mvcboard(idx, name, subject, content, ref, lev, seq)
-		values(mvcboard_idx_seq.nextval, #{name}, #{subject}, #{content}, mvcboard_idx_seq.currval, #{lev}, #{seq})
+		values(mvcboard_idx_seq.nextval, #{name}, #{subject}, #{content}, #{ref}, #{lev}, #{seq})
 	</insert>
 	
 	<!-- 글 목록 전체를 얻어온다 -->
@@ -31,6 +32,13 @@
 	<!-- 글을 수정한다 -->
 	<update id="update" parameterType="kr.koreait.VO.MvcBoardVO">
 		update mvcboard set subject = #{subject}, content = #{content} where idx = #{idx}
+	</update>
+	
+	<!-- 답글의 순서를 조정하기 위해 seq를 수정한다 -->
+	<update id="replyArange" parameterType="java.util.HashMap">
+		<![CDATA[
+		update category set seq = seq + 1 where ref = #{ref} and seq >= #{seq}
+		]]>
 	</update>
 	
 	<!-- 글을 삭제한다 -->	

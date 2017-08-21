@@ -22,7 +22,14 @@
 	<c:if test="${list.list.size() != 0 }">
 		<c:forEach var="vo" items="${list.list }">
 		<tr>
-			<td>${vo.idx }</td>
+			<td align="center">
+				<c:if test="${vo.lev == 0}">
+					${vo.idx }
+				</c:if>				
+				<c:if test="${vo.lev >= 1}">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ㄴRe
+				</c:if>
+			</td>
 			<td>
 				<c:set var="name" value="${fn:replace(vo.name, '<', '&lt;')}"/>
 				<c:set var="name" value="${fn:replace(name, '>', '&gt;')}"/>

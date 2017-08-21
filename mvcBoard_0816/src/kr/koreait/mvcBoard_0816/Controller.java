@@ -40,10 +40,7 @@ public class Controller extends HttpServlet {
 			case "/insert.nhn":
 				viewPage = "/WEB-INF/insert.jsp";
 				break;
-			case "/insertOK.nhn":
-				System.out.println(request.getParameter("name"));
-				System.out.println(request.getParameter("subject"));
-				System.out.println(request.getParameter("content"));				
+			case "/insertOK.nhn":			
 				service.insert(request, response);
 				viewPage = "/WEB-INF/insertOK.jsp";
 				break;

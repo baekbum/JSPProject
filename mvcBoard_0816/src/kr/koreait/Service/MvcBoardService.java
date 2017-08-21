@@ -1,5 +1,7 @@
 package kr.koreait.Service;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -96,9 +98,11 @@ public class MvcBoardService {
 		mapper.commit();
 		mapper.close();	
 	}
-	
+
+//	URL 창에 replyOk.nhn로 요청이 들어오면 넘어온 글 번호에 해당되는 글에 답글을 입력하는 메소드
 	public void reply(HttpServletRequest request, HttpServletResponse response) {
 		SqlSession mapper = MySession.getSession();
+		MvcBoardDAO dao = MvcBoardDAO.getInstance();
 		int idx = Integer.parseInt(request.getParameter("idx"));
 		int ref = Integer.parseInt(request.getParameter("ref"));
 		int lev = Integer.parseInt(request.getParameter("lev"));
@@ -114,7 +118,13 @@ public class MvcBoardService {
 		vo.setRef(ref);
 		vo.setLev(lev + 1);
 		vo.setSeq(seq + 1);
-		MvcBoardDAO.getInstance().reply(mapper, vo);		
+		
+		HashMap<String, Integer> hmap = new HashMap<>();
+		hmap.put("ref", vo.getRef());
+		hmap.put("seq", vo.getSeq());
+		
+		dao.replyArange(mapper, hmap);		
+		dao.reply(mapper, vo);		
 		mapper.commit();
 		mapper.close();	
 	}
